@@ -1,0 +1,48 @@
+@import "src/assets/styles/_mixins.scss";
+
+/* Checkbox */
+.checkbox {
+  position: absolute;
+  opacity: 0;
+}
+
+.checkbox + label {
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.checkbox + label:before {
+  content: '';
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  @apply ml-7;
+}
+
+.checkbox + label:after {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-radius: 3px;
+  border-width: 3px;
+  width: 40px;
+  height: 40px;
+  @apply border-blue;
+}
+
+.checkbox:checked + label:after {
+  background: url('./check.svg') no-repeat center center / 20px 16px;
+}
+
+.error {
+  //@apply after:border-red opacity-70 !important;
+}
+
+.good {
+  // Styles for the good class
+}
+
