@@ -5,8 +5,8 @@ import styles from "./Cards.module.css";
 import { EndGameModal } from "../../components/EndGameModal/EndGameModal";
 import { Button } from "../../components/Button/Button";
 import { Card } from "../../components/Card/Card";
-import {useAtomValue} from "jotai";
-import {easyModeAtom} from "../../store/easy-mode.atom";
+import { useAtomValue } from "jotai";
+import { easyModeAtom } from "../../store/easy-mode.atom";
 import clsx from "clsx";
 
 // Игра закончилась
@@ -92,7 +92,6 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
       return;
     }
 
-
     // Открываем карту
     const nextCards = cards.map(card => {
       if (card.id !== clickedCard.id) {
@@ -108,7 +107,6 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     // Обновляем состояние карт
     setCards(nextCards);
 
-
     // Получаем все открытые карты
     const openCards = nextCards.filter(card => card.open);
 
@@ -121,7 +119,9 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
       if (openCardsWithoutPair.length === 2) {
         setTimeout(() => {
-          setCards(cards.map(card => (card.open && openCardsWithoutPair.includes(card)) ? { ...card, open: false } : card));
+          setCards(
+            cards.map(card => (card.open && openCardsWithoutPair.includes(card) ? { ...card, open: false } : card)),
+          );
           setLifeCount(prev => prev - 1);
           if (lifeCount - 1 <= 0) {
             finishGame(STATUS_LOST);
@@ -133,7 +133,6 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
     // Проверяем, все ли карты открыты
     const isPlayerWon = nextCards.every(card => card.open);
-
 
     // Если игрок выиграл, то заканчиваем игру
     if (isPlayerWon) {
@@ -195,9 +194,8 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   }, [gameStartDate, gameEndDate]);
 
   // Счетчик жизней
-  const easyMode = useAtomValue(easyModeAtom)
-  const [lifeCount, setLifeCount] = useState(3)
-
+  const easyMode = useAtomValue(easyModeAtom);
+  const [lifeCount, setLifeCount] = useState(3);
 
   return (
     <div className={styles.container}>
@@ -222,54 +220,86 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
             </>
           )}
         </div>
-        {status === STATUS_IN_PROGRESS && easyMode ? <div className={'flex flex-col space-y-1.5 items-center'}><div>
-            <p className={'text-base text-white'}>Осталось {lifeCount} {lifeCount === 1 ? "попытка" : "попытки"}</p>
-        </div>
-          <div className={'flex flex-row items-center space-x-3'}>
-            <svg className={clsx('fill-green transition-colors duration-300 ease-in-out', {
-                'opacity-70': lifeCount === 0,
-            })} width="40" height="36" viewBox="0 0 40 36" xmlns="http://www.w3.org/2000/svg">
-              <path id="Union" fillRule="evenodd" clipRule="evenodd"
-                    d="M20.0244 4.51805C17.4973 1.68832 14.1032 2.59568e-06 11.1392 2.59462e-06C6.07592 2.5928e-06 0.253163 2.85111 -1.23523e-07 11.4044C0.23552 19.8439 9.4544 26.9374 18.2802 33.7285C18.9413 34.2372 19.6003 34.7442 20.2531 35.25C20.2531 35.25 20.2531 35.25 20.2532 35.2499C20.2532 35.25 20.2532 35.25 20.2533 35.25C20.5763 34.9997 20.9002 34.7492 21.2246 34.4982C30.307 27.4724 39.7556 20.1633 40 11.4044C39.7468 2.8511 33.4178 0 28.3545 0C25.3905 0 22.2831 1.68832 20.0244 4.51805Z"
-              />
-            </svg>
-            <svg className={clsx('fill-green', {
-              'opacity-70': lifeCount < 2,
-            })} width="40" height="36" viewBox="0 0 40 36" xmlns="http://www.w3.org/2000/svg">
-              <path id="Union" fillRule="evenodd" clipRule="evenodd"
-                    d="M20.0244 4.51805C17.4973 1.68832 14.1032 2.59568e-06 11.1392 2.59462e-06C6.07592 2.5928e-06 0.253163 2.85111 -1.23523e-07 11.4044C0.23552 19.8439 9.4544 26.9374 18.2802 33.7285C18.9413 34.2372 19.6003 34.7442 20.2531 35.25C20.2531 35.25 20.2531 35.25 20.2532 35.2499C20.2532 35.25 20.2532 35.25 20.2533 35.25C20.5763 34.9997 20.9002 34.7492 21.2246 34.4982C30.307 27.4724 39.7556 20.1633 40 11.4044C39.7468 2.8511 33.4178 0 28.3545 0C25.3905 0 22.2831 1.68832 20.0244 4.51805Z"
-              />
-            </svg>
-            <svg className={clsx('fill-green', {
-              'opacity-40': lifeCount < 3,
-            })} width="40" height="36" viewBox="0 0 40 36" xmlns="http://www.w3.org/2000/svg">
-              <path id="Union" fillRule="evenodd" clipRule="evenodd"
-                    d="M20.0244 4.51805C17.4973 1.68832 14.1032 2.59568e-06 11.1392 2.59462e-06C6.07592 2.5928e-06 0.253163 2.85111 -1.23523e-07 11.4044C0.23552 19.8439 9.4544 26.9374 18.2802 33.7285C18.9413 34.2372 19.6003 34.7442 20.2531 35.25C20.2531 35.25 20.2531 35.25 20.2532 35.2499C20.2532 35.25 20.2532 35.25 20.2533 35.25C20.5763 34.9997 20.9002 34.7492 21.2246 34.4982C30.307 27.4724 39.7556 20.1633 40 11.4044C39.7468 2.8511 33.4178 0 28.3545 0C25.3905 0 22.2831 1.68832 20.0244 4.51805Z"
-              />
-            </svg>
+        {status === STATUS_IN_PROGRESS && easyMode ? (
+          <div className={"flex flex-col space-y-1.5 items-center"}>
+            <div>
+              <p className={"text-base text-white"}>
+                Осталось {lifeCount} {lifeCount === 1 ? "попытка" : "попытки"}
+              </p>
+            </div>
+            <div className={"flex flex-row items-center space-x-3"}>
+              <svg
+                className={clsx("fill-green transition-colors duration-300 ease-in-out", {
+                  "opacity-70": lifeCount === 0,
+                })}
+                width="40"
+                height="36"
+                viewBox="0 0 40 36"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  id="Union"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M20.0244 4.51805C17.4973 1.68832 14.1032 2.59568e-06 11.1392 2.59462e-06C6.07592 2.5928e-06 0.253163 2.85111 -1.23523e-07 11.4044C0.23552 19.8439 9.4544 26.9374 18.2802 33.7285C18.9413 34.2372 19.6003 34.7442 20.2531 35.25C20.2531 35.25 20.2531 35.25 20.2532 35.2499C20.2532 35.25 20.2532 35.25 20.2533 35.25C20.5763 34.9997 20.9002 34.7492 21.2246 34.4982C30.307 27.4724 39.7556 20.1633 40 11.4044C39.7468 2.8511 33.4178 0 28.3545 0C25.3905 0 22.2831 1.68832 20.0244 4.51805Z"
+                />
+              </svg>
+              <svg
+                className={clsx("fill-green", {
+                  "opacity-70": lifeCount < 2,
+                })}
+                width="40"
+                height="36"
+                viewBox="0 0 40 36"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  id="Union"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M20.0244 4.51805C17.4973 1.68832 14.1032 2.59568e-06 11.1392 2.59462e-06C6.07592 2.5928e-06 0.253163 2.85111 -1.23523e-07 11.4044C0.23552 19.8439 9.4544 26.9374 18.2802 33.7285C18.9413 34.2372 19.6003 34.7442 20.2531 35.25C20.2531 35.25 20.2531 35.25 20.2532 35.2499C20.2532 35.25 20.2532 35.25 20.2533 35.25C20.5763 34.9997 20.9002 34.7492 21.2246 34.4982C30.307 27.4724 39.7556 20.1633 40 11.4044C39.7468 2.8511 33.4178 0 28.3545 0C25.3905 0 22.2831 1.68832 20.0244 4.51805Z"
+                />
+              </svg>
+              <svg
+                className={clsx("fill-green", {
+                  "opacity-40": lifeCount < 3,
+                })}
+                width="40"
+                height="36"
+                viewBox="0 0 40 36"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  id="Union"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M20.0244 4.51805C17.4973 1.68832 14.1032 2.59568e-06 11.1392 2.59462e-06C6.07592 2.5928e-06 0.253163 2.85111 -1.23523e-07 11.4044C0.23552 19.8439 9.4544 26.9374 18.2802 33.7285C18.9413 34.2372 19.6003 34.7442 20.2531 35.25C20.2531 35.25 20.2531 35.25 20.2532 35.2499C20.2532 35.25 20.2532 35.25 20.2533 35.25C20.5763 34.9997 20.9002 34.7492 21.2246 34.4982C30.307 27.4724 39.7556 20.1633 40 11.4044C39.7468 2.8511 33.4178 0 28.3545 0C25.3905 0 22.2831 1.68832 20.0244 4.51805Z"
+                />
+              </svg>
+            </div>
           </div>
-        </div> : null}
+        ) : null}
         {status === STATUS_IN_PROGRESS ? <Button onClick={resetGame}>Начать заново</Button> : null}
       </div>
 
       <div className={styles.cards}>
         {cards.map(card => (
-            <Card
-                key={card.id}
-                onClick={() => openCard(card)}
-                open={status !== STATUS_IN_PROGRESS ? true : card.open}
-                suit={card.suit}
-                rank={card.rank}
-            />
+          <Card
+            key={card.id}
+            onClick={() => openCard(card)}
+            open={status !== STATUS_IN_PROGRESS ? true : card.open}
+            suit={card.suit}
+            rank={card.rank}
+          />
         ))}
       </div>
 
       {isGameEnded ? (
-          <div className={styles.modalContainer}>
-            <EndGameModal
-                isWon={status === STATUS_WON}
-                gameDurationSeconds={timer.seconds}
-                gameDurationMinutes={timer.minutes}
+        <div className={styles.modalContainer}>
+          <EndGameModal
+            isWon={status === STATUS_WON}
+            gameDurationSeconds={timer.seconds}
+            gameDurationMinutes={timer.minutes}
             onClick={resetGame}
           />
         </div>
