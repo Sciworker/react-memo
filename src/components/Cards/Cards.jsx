@@ -126,7 +126,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
           if (lifeCount - 1 <= 0) {
             finishGame(STATUS_LOST);
           }
-        }, 1);
+        }, 500);
         return;
       }
     }
