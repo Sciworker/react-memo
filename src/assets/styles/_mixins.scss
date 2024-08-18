@@ -1,4 +1,4 @@
-@use 'sass:math';
+@use "sass:math";
 
 //Percent
 @function percent($px, $from) {
@@ -42,16 +42,16 @@
   // Формула плавающего значения
   // Источник: https://css-tricks.com/linearly-scale-font-size-with-css-clamp-based-on-the-viewport/
   $slope: math.div(($startSize - $minSize), ($widthFrom - $widthTo));
-  $yIntersection: -$widthTo * $slope+$minSize;
+  $yIntersection: -$widthTo * $slope + $minSize;
 
   @if ($yIntersection==0) {
     $yIntersection: 0.000001;
   }
 
-  $flyValue: #{rem($yIntersection)}" + "#{$slope * 100} + "vw";
+  $flyValue: #{rem($yIntersection)}" + " #{$slope * 100} + "vw";
 
   // Получение значения свойства
-  $propertyValue: clamp(#{ rem($minSize)}, #{ $flyValue}, #{rem($startSize)});
+  $propertyValue: clamp(#{rem($minSize)}, #{$flyValue}, #{rem($startSize)});
 
   // Если отрицательные значения
   @if ($minSize > $startSize) {
@@ -65,7 +65,9 @@
 
   // Если не поддерживается clamp();
   @supports not (#{$property}: $propertyValue) {
-    #{$property}: calc(#{rem($minSize)} + #{$addSize} * (100vw - #{rem($widthTo)}) / #{math.div($widthFrom, 16) - math.div($widthTo, 16)});
+    #{$property}: calc(
+      #{rem($minSize)} + #{$addSize} * (100vw - #{rem($widthTo)}) / #{math.div($widthFrom, 16) - math.div($widthTo, 16)}
+    );
   }
 
   // Устанавливаем значения по умолчанию
@@ -83,12 +85,12 @@
 }
 
 $screen-sizes: (
-        xs: 30rem,
-        sm: 40rem,
-        md: 48rem,
-        lg: 64rem,
-        xl: 80rem,
-        "2xl": 100rem
+  xs: 30rem,
+  sm: 40rem,
+  md: 48rem,
+  lg: 64rem,
+  xl: 80rem,
+  "2xl": 100rem,
 );
 
 //Breakpoints

@@ -1,16 +1,15 @@
 import { Link } from "react-router-dom";
 import styles from "./SelectLevelPage.module.css";
-import {useAtom} from "jotai";
-import {easyModeAtom} from "../../store/easy-mode.atom";
+import { useAtom } from "jotai";
+import { easyModeAtom } from "../../store/easy-mode.atom";
 import Checkbox from "../../components/Checkbox/checkbox";
-import {useEffect, useState} from "react";
 
 export function SelectLevelPage() {
-  const [easyMode, setEasyMod] = useAtom(easyModeAtom)
+  const [easyMode, setEasyMod] = useAtom(easyModeAtom);
 
   const onCheckboxChange = () => {
-    setEasyMod(!easyMode)
-  }
+    setEasyMod(!easyMode);
+  };
 
   return (
     <div className={styles.container}>
@@ -33,7 +32,7 @@ export function SelectLevelPage() {
             </Link>
           </li>
         </ul>
-        <Checkbox label={'Упрощенный режим'} name={'checkbox'} checked={easyMode} onChange={onCheckboxChange} />
+        <Checkbox label={"Упрощенный режим"} name={"checkbox"} checked={easyMode} onChange={onCheckboxChange} />
       </div>
     </div>
   );
