@@ -60,13 +60,17 @@
 }
 
 .column_1 {
-    min-width: 20%;
+    min-width: 25%;
 }
 
 .column_2 {
-    min-width: 54.5%;
+    min-width: 25%;
 }
 
 .column_3 {
-    min-width: 11.3%;
+    min-width: 25%;
+}
+
+.column_4 {
+    min-width: 5%;
 }

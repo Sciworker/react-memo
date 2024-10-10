@@ -77,3 +77,40 @@
   text-align: center;
   color: #FFFFFF;
 }
+
+.powers {
+  margin-left: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+
+
+.iconContainer {
+  position: relative;
+}
+
+.iconContainerWithOverlay {
+  position: relative;
+  display: inline-block;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+
+.highlightedIcon {
+  position: relative;
+  z-index: 11;
+}
+
+.iconContainerWithOverlay img:hover,
+.iconContainerWithOverlay .popup {
+  z-index: 11;
+}

@@ -1,10 +1,13 @@
 import { shuffle } from "lodash";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { generateDeck } from "../../utils/cards";
 import styles from "./Cards.module.css";
 import { EndGameModal } from "../../components/EndGameModal/EndGameModal";
 import { Button } from "../../components/Button/Button";
 import { Card } from "../../components/Card/Card";
+import epiphanyImageUrl from "./images/eye.svg";
+import alahamoraImageUrl from "./images/ala.svg";
+import { Popup } from "../Popup/Popup";
 
 const STATUS_LOST = "STATUS_LOST";
 const STATUS_WON = "STATUS_WON";
@@ -40,6 +43,13 @@ export function Cards({ pairsCount = 3, previewSeconds = 5, lives = 3 }) {
   const [gameEndDate, setGameEndDate] = useState(null);
   const [timer, setTimer] = useState({ seconds: 0, minutes: 0 });
   const [openCards, setOpenCards] = useState([]);
+  const [isEpiphanyVisible, setEpiphanyVisible] = useState(false);
+  const [isAlahamoraVisible, setAlahamoraVisible] = useState(false);
+  const [isEpiphanyUsed, setEpiphanyUsed] = useState(false);
+  const [isAlahamoraUsed, setAlahamoraUsed] = useState(false);
+
+  const epiphanyRef = useRef(null); // Ref для Epiphany
+  const alahamoraRef = useRef(null); // Ref для Alahamora
 
   function finishGame(status = STATUS_LOST) {
     setGameEndDate(new Date());
@@ -53,6 +63,8 @@ export function Cards({ pairsCount = 3, previewSeconds = 5, lives = 3 }) {
     setTimer(getTimerValue(startDate, null));
     setStatus(STATUS_IN_PROGRESS);
     setOpenCards([]);
+    setEpiphanyUsed(false);
+    setAlahamoraUsed(false);
   }
 
   function resetGame() {
@@ -63,6 +75,8 @@ export function Cards({ pairsCount = 3, previewSeconds = 5, lives = 3 }) {
     setTimer(getTimerValue(null, null));
     setStatus(STATUS_PREVIEW);
     setOpenCards([]);
+    setEpiphanyUsed(false);
+    setAlahamoraUsed(false);
   }
 
   const openCard = (clickedCard) => {
@@ -123,6 +137,78 @@ export function Cards({ pairsCount = 3, previewSeconds = 5, lives = 3 }) {
 
   const isGameEnded = status === STATUS_LOST || status === STATUS_WON;
 
+  const handleEpiphanyClick = () => {
+    if (status !== STATUS_IN_PROGRESS || isEpiphanyUsed) return;
+
+    const currentTime = new Date();
+    setGameEndDate(currentTime);
+
+    setCards((prevCards) =>
+      prevCards.map((card) => ({
+        ...card,
+        open: true,
+      }))
+    );
+
+    setTimeout(() => {
+      setCards((prevCards) =>
+        prevCards.map((card) => {
+          if (!openCards.includes(card)) {
+            return { ...card, open: false };
+          }
+          return card;
+        })
+      );
+
+      const adjustedStartTime = new Date(gameStartDate.getTime() + 5000);
+      setGameStartDate(adjustedStartTime);
+      setGameEndDate(null);
+    }, 5000);
+
+    setEpiphanyUsed(true);
+    setEpiphanyVisible(false); 
+  };
+
+  const handleAlahamoraClick = () => {
+    if (status !== STATUS_IN_PROGRESS || isAlahamoraUsed) return;
+
+    const closedCards = cards.filter((card) => !card.open);
+
+    const cardPairs = closedCards.reduce((acc, card) => {
+      const key = `${card.suit}-${card.rank}`;
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(card);
+      return acc;
+    }, {});
+
+    const validPairs = Object.values(cardPairs).filter(pair => pair.length === 2);
+
+    if (validPairs.length === 0) {
+      return;
+    }
+
+    const randomPair = shuffle(validPairs)[0];
+
+    setCards((prevCards) =>
+      prevCards.map((card) => {
+        if (card.id === randomPair[0].id || card.id === randomPair[1].id) {
+          return { ...card, open: true };
+        }
+        return card;
+      })
+    );
+
+    const isPlayerWon = cards.every((card) => card.open);
+    if (isPlayerWon) {
+      finishGame(STATUS_WON);
+    }
+
+    setAlahamoraUsed(true);
+    setAlahamoraVisible(false);
+  };
+
   useEffect(() => {
     if (status !== STATUS_PREVIEW) {
       return;
@@ -156,6 +242,42 @@ export function Cards({ pairsCount = 3, previewSeconds = 5, lives = 3 }) {
     };
   }, [gameStartDate, gameEndDate]);
 
+  const getAchievements = () => {
+    const achievements = [];
+    if (livesCount === 1) {
+      achievements.push(1);
+    }
+    if (!isEpiphanyUsed && !isAlahamoraUsed) {
+      achievements.push(2);
+    }
+    return achievements;
+  };
+
+  const handleClickOutside = (event) => {
+    if (
+      epiphanyRef.current &&
+      !epiphanyRef.current.contains(event.target) &&
+      alahamoraRef.current &&
+      !alahamoraRef.current.contains(event.target)
+    ) {
+      setEpiphanyVisible(false);
+      setAlahamoraVisible(false);
+    }
+  };
+
+  const handleOverlayClick = (event) => {
+    event.stopPropagation();
+    setEpiphanyVisible(false);
+    setAlahamoraVisible(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isEpiphanyVisible, isAlahamoraVisible]);
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -169,24 +291,66 @@ export function Cards({ pairsCount = 3, previewSeconds = 5, lives = 3 }) {
             <>
               <div className={styles.timerValue}>
                 <div className={styles.timerDescription}>min</div>
-                <div>{timer.minutes.toString ().padStart (2, "0")}</div>
+                <div>{timer.minutes.toString().padStart(2, "0")}</div>
               </div>
               .
               <div className={styles.timerValue}>
                 <div className={styles.timerDescription}>sec</div>
-                <div>{timer.seconds.toString ().padStart (2, "0")}</div>
+                <div>{timer.seconds.toString().padStart(2, "0")}</div>
+              </div>
+              <div className={styles.powers}>
+                <div
+                  ref={epiphanyRef}
+                  onClick={handleEpiphanyClick}
+                  onMouseEnter={() => setEpiphanyVisible(true)}
+                  onMouseLeave={() => setEpiphanyVisible(false)}
+                  className={styles.iconContainerWithOverlay}
+                >
+                  {isEpiphanyVisible && (
+                    <div className={styles.overlay} onClick={handleOverlayClick}></div>
+                  )}
+                  <img src={epiphanyImageUrl} alt="Epiphany" className={styles.highlightedIcon} />
+                  {isEpiphanyVisible && (
+                    <Popup
+                      title="Прозрение"
+                      text="На 5 секунд показываются все карты. Таймер длительности игры на это время останавливается."
+                      isVisible={isEpiphanyVisible}
+                    />
+                  )}
+                </div>
+
+                <div
+                  ref={alahamoraRef}
+                  onClick={handleAlahamoraClick}
+                  onMouseEnter={() => setAlahamoraVisible(true)}
+                  onMouseLeave={() => setAlahamoraVisible(false)}
+                  className={styles.iconContainerWithOverlay}
+                >
+                  {isAlahamoraVisible && (
+                    <div className={styles.overlay} onClick={handleOverlayClick}></div>
+                  )}
+                  <img src={alahamoraImageUrl} alt="Alahamora" className={styles.highlightedIcon} />
+                  {isAlahamoraVisible && (
+                    <Popup
+                      title="Алохомора"
+                      text="Открывается случайная пара карт."
+                      isVisible={isAlahamoraVisible}
+                    />
+                  )}
+                </div>
               </div>
             </>
           )}
         </div>
+
         {status === STATUS_IN_PROGRESS ? <Button onClick={resetGame}>Начать заново</Button> : null}
       </div>
 
       <div className={styles.cards}>
-        {cards.map ((card) => (
+        {cards.map((card) => (
           <Card
             key={card.id}
-            onClick={() => openCard (card)}
+            onClick={() => openCard(card)}
             open={status !== STATUS_IN_PROGRESS ? true : card.open}
             suit={card.suit}
             rank={card.rank}
@@ -201,6 +365,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5, lives = 3 }) {
             gameDurationSeconds={timer.seconds}
             gameDurationMinutes={timer.minutes}
             onClick={resetGame}
+            achievements={getAchievements()}
           />
         </div>
       ) : null}
@@ -208,7 +373,6 @@ export function Cards({ pairsCount = 3, previewSeconds = 5, lives = 3 }) {
       <div className={styles.lives}>
         <p>Осталось жизней: {livesCount}</p>
       </div>
-
     </div>
   );
 }

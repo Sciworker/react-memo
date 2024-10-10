@@ -6,7 +6,7 @@ import celebrationImageUrl from "./images/celebration.png";
 import { getLeader, addLeader } from "../../api/api";
 import { Link, useNavigate } from "react-router-dom";
 
-export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, onClick }) {
+export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, onClick, achievements }) {
   const [isTopTen, setIsTopTen] = useState(false);
   const [title, setTitle] = useState(isWon ? "Вы победили!" : "Вы проиграли!");
   const [username, setUsername] = useState("");
@@ -17,30 +17,32 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
   const imgAlt = isWon ? "celebration emoji" : "dead emoji";
   const totalTime = gameDurationMinutes * 60 + gameDurationSeconds;
 
+  const checkTopTen = async () => {
+    const data = await getLeader();
+    if (data && data.leaders) {
+      const topTen = data.leaders
+        .sort((a, b) => a.time - b.time)
+        .slice(0, 10);
+      if (topTen.length < 10 || totalTime < topTen[topTen.length - 1].time) {
+        setIsTopTen(true);
+        setTitle("Вы попали на Лидерборд!");
+      } else {
+        setTitle("Вы победили!");
+      }
+    }
+  };
+
   useEffect(() => {
     if (isWon) {
-      async function checkTopTen() {
-        const data = await getLeader();
-        if (data && data.leaders) {
-          const topTen = data.leaders
-            .sort((a, b) => a.time - b.time)
-            .slice(0, 10);
-
-          if (topTen.length < 10 || totalTime < topTen[topTen.length - 1].time) {
-            setIsTopTen(true);
-            setTitle("Вы попали на Лидерборд!");
-          } else {
-            setTitle("Вы победили!");
-          }
-        }
-      }
       checkTopTen();
     }
   }, [isWon, totalTime]);
 
   const saveLeaderData = async () => {
-    if (username && !isSubmitted) {
-      await addLeader(username, totalTime);
+    const leaderName = username.trim() === "" ? "Пользователь" : username;
+  
+    if (!isSubmitted) {
+      await addLeader(leaderName, totalTime, achievements);
       setIsSubmitted(true);
     }
   };
