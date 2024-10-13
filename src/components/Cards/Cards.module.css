@@ -23,12 +23,13 @@
   justify-content: center;
   align-items: center;
   background: #004980c0;
+  z-index: 100;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: end;
   margin-bottom: 35px;
 }
 
@@ -69,4 +70,48 @@
   line-height: 32px;
 
   margin-bottom: -12px;
+}
+
+.lives {
+  margin-top: 50px;
+  font-size: 40px;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.powers {
+  margin-left: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+
+
+.iconContainer {
+  position: relative;
+}
+
+.iconContainerWithOverlay {
+  position: relative;
+  display: inline-block;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+
+.highlightedIcon {
+  position: relative;
+  z-index: 11;
+}
+
+.iconContainerWithOverlay img:hover,
+.iconContainerWithOverlay .popup {
+  z-index: 11;
 }

@@ -8,15 +8,13 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "classnames": "^2.3.2",
-    "clsx": "^2.1.1",
     "gh-pages": "^6.0.0",
-    "jotai": "^2.9.3",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.15.0",
     "react-scripts": "5.0.1",
-    "sass": "^1.77.8"
+    "react-tooltip": "^5.28.0"
   },
   "scripts": {
     "predeploy": "npm run build",
@@ -32,8 +30,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
     "lefthook": "^1.4.9",
-    "prettier": "^3.0.2",
-    "tailwindcss": "^3.4.10"
+    "prettier": "^3.0.2"
   },
   "browserslist": {
     "production": [

@@ -59,7 +59,6 @@ export function Card({ onClick, suit, rank, open }) {
             <ClosedCard onClick={onClick} />
           </div>
           <div className={styles.back}>
-            {/* Защита от читерства через dev tools: Скрываем масть и ранг пока карта не открыта */}
             <OpenCard suit={open ? suit : ""} rank={open ? rank : ""} />
           </div>
         </div>

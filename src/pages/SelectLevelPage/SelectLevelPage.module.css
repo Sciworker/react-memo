@@ -8,7 +8,7 @@
 
 .modal {
   width: 480px;
-  height: 459px;
+  padding: 48px 0;
   border-radius: 12px;
   background: #c2f5ff;
   display: flex;
@@ -21,7 +21,7 @@
   color: #004980;
   text-align: center;
   font-variant-numeric: lining-nums proportional-nums;
-  font-family: StratosSkyeng;
+  font-family: Roboto;
   font-size: 40px;
   font-style: normal;
   font-weight: 400;
@@ -48,6 +48,10 @@
   background: #fff;
 }
 
+.levelSelected {
+  background: #7ac100;
+}
+
 .levelLink {
   color: #0080c1;
   text-align: center;
@@ -59,6 +63,74 @@
   text-decoration: none;
 }
 
+.levelLinkSelected {
+  color: #FFF;
+  text-align: center;
+  font-family: StratosSkyeng;
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 72px;
+  text-decoration: none;
+}
+
 .levelLink:visited {
   color: #0080c1;
+}
+
+.checkbox_input {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 38px;
+}
+
+.checkbox {
+  width: 30px;
+  height: 29px;
+  flex-shrink: 0;
+  appearance: none;
+  border: none;
+  border-radius: 4px;
+  background-color: #FFFFFF;
+  position: relative;
+  cursor: pointer;
+}
+
+.checkbox:checked {
+  background-color: #FFFFFF;
+  border: #7ac100;
+  background-image: url('./../../../public/Group 18390.svg');
+}
+
+/*.checkbox:checked::before {*/
+/*  content: "✓"; !* Символ галочки *!*/
+/*  color: #7ac100;*/
+/*  font-size: 20px;*/
+/*  position: absolute;*/
+/*  top: 2px;*/
+/*  left: 5px;*/
+/*}*/
+
+.label {
+  color: #000;
+  text-align: center;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-family: Roboto;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px; /* 133.333% */
+}
+
+.leaderboard_link {
+  margin-top: 24px;
+  color: #004980;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-family: Roboto;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px; /* 177.778% */
+  text-decoration-line: underline;
 }

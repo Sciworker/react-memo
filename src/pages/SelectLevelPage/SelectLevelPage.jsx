@@ -1,39 +1,63 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./SelectLevelPage.module.css";
-import {useAtom} from "jotai";
-import {easyModeAtom} from "../../store/easy-mode.atom";
-import Checkbox from "../../components/Checkbox/checkbox";
-import {useEffect, useState} from "react";
+import { Button } from "../../components/Button/Button";
 
 export function SelectLevelPage() {
-  const [easyMode, setEasyMod] = useAtom(easyModeAtom)
+  const [selectedLevel, setSelectedLevel] = useState(null);
+  const [easyMode, setEasyMode] = useState(false);
+  const navigate = useNavigate();
 
-  const onCheckboxChange = () => {
-    setEasyMod(!easyMode)
-  }
+  const handleLevelClick = (level) => {
+    setSelectedLevel(level);
+  };
+
+  const handleEasyModeChange = (event) => {
+    setEasyMode(event.target.checked);
+  };
+
+  const handlePlayClick = () => {
+    if (selectedLevel) {
+      const lives = easyMode ? 3 : 1;
+      navigate(`/game/${selectedLevel}?lives=${lives}&easyMode=${easyMode}`);
+    } else {
+      alert("Пожалуйста, выберите уровень сложности");
+    }
+  };
+
 
   return (
     <div className={styles.container}>
       <div className={styles.modal}>
-        <h1 className={styles.title}>Выбери сложность</h1>
+        <h1 className={styles.title}>Выбери <br /> сложность</h1>
         <ul className={styles.levels}>
-          <li className={styles.level}>
-            <Link className={styles.levelLink} to="/game/3">
+          <li className={selectedLevel === 3 ? `${styles.level} ${styles.levelSelected}` : styles.level} onClick={() => handleLevelClick(3)}>
+            <div className={selectedLevel === 3 ? styles.levelLinkSelected : styles.levelLink}>
               1
-            </Link>
+            </div>
           </li>
-          <li className={styles.level}>
-            <Link className={styles.levelLink} to="/game/6">
+          <li className={selectedLevel === 6 ? `${styles.level} ${styles.levelSelected}` : styles.level} onClick={() => handleLevelClick(6)}>
+            <div className={selectedLevel === 6 ? styles.levelLinkSelected : styles.levelLink}>
               2
-            </Link>
+            </div>
           </li>
-          <li className={styles.level}>
-            <Link className={styles.levelLink} to="/game/9">
+          <li className={selectedLevel === 9 ? `${styles.level} ${styles.levelSelected}` : styles.level} onClick={() => handleLevelClick(9)}>
+            <div className={selectedLevel === 9 ? styles.levelLinkSelected : styles.levelLink}>
               3
-            </Link>
+            </div>
           </li>
         </ul>
-        <Checkbox label={'Упрощенный режим'} name={'checkbox'} checked={easyMode} onChange={onCheckboxChange} />
+        <div className={styles.checkbox_input}>
+          <input
+            className={styles.checkbox}
+            type="checkbox"
+            checked={easyMode}
+            onChange={handleEasyModeChange}
+          />
+          <label className={styles.label}>Лёгкий режим (3 жизни)</label>
+        </div>
+        <Button onClick={handlePlayClick}>Играть</Button>
+        <Link className={styles.leaderboard_link} to="/leaderboard">Перейти к лидерборду</Link>
       </div>
     </div>
   );

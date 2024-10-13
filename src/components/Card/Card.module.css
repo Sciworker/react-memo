@@ -72,8 +72,6 @@
   height: 25px;
 }
 
-/* Анимация переворота */
-/* весь контейнер поддерживает перспективу */
 .flipContainer {
   perspective: 1000;
 }
@@ -94,14 +92,12 @@
   height: 133px;
 }
 
-/* здесь находится скорость перевертывания */
 .flipper {
   transition: 0.6s;
   transform-style: preserve-3d;
   position: relative;
 }
 
-/* скройте обратную сторону во время переворота */
 .front,
 .back {
   backface-visibility: hidden;
@@ -110,7 +106,6 @@
   left: 0;
 }
 
-/* обратная, изначально скрытая сторона */
 .back {
   z-index: 2;
   transform: rotateY(180deg);

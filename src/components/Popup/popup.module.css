@@ -1,0 +1,26 @@
+.popup {
+    position: absolute;
+    background-color: #C2F5FF;
+    color: #004980;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    width: 180px;
+    text-align: center;
+    font-size: 18px;
+    line-height: 20px;
+    top: 100%;
+    left: -100%;
+    margin-top: 10px;
+  }
+  
+  .popupText {
+    margin-top: 10px;
+  }
+  
+  .iconContainer {
+    position: relative;
+  }
+  
+  
