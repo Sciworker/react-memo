@@ -8,9 +8,11 @@ import NonPowerImageUrl from './images/non-power.svg';
 import PowerImageUrl from './images/power.svg';
 import HardImageUrl from './images/hard.svg';
 import { Tooltip } from 'react-tooltip';
+import { useNavigate } from "react-router-dom";
 
 export function Leaderboard() {
   const [leaders, setLeaders] = useState([]);
+  const navigate = useNavigate(); 
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -125,11 +127,15 @@ export function Leaderboard() {
     }
   };
 
+  const handleStartGame = () => {
+    navigate("/");
+  };
+
   return (
     <div className="container">
       <div className={classes.leaderboard_header}>
         <h3 className={classes.leaderboard_title}>Лидерборд</h3>
-        <Button className={styles.button_in_leaderboard}>Начать игру</Button>
+        <Button onClick={handleStartGame} className={styles.button_in_leaderboard}>Начать игру</Button>
       </div>
       <div className={classes.top_players_table}>
         <div className={classes.table_block}>

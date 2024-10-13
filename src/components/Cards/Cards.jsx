@@ -8,6 +8,7 @@ import { Card } from "../../components/Card/Card";
 import epiphanyImageUrl from "./images/eye.svg";
 import alahamoraImageUrl from "./images/ala.svg";
 import { Popup } from "../Popup/Popup";
+import { useLocation } from 'react-router-dom';
 
 const STATUS_LOST = "STATUS_LOST";
 const STATUS_WON = "STATUS_WON";
@@ -47,9 +48,12 @@ export function Cards({ pairsCount = 3, previewSeconds = 5, lives = 3 }) {
   const [isAlahamoraVisible, setAlahamoraVisible] = useState(false);
   const [isEpiphanyUsed, setEpiphanyUsed] = useState(false);
   const [isAlahamoraUsed, setAlahamoraUsed] = useState(false);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const easyMode = queryParams.get('easyMode') === 'true';
 
-  const epiphanyRef = useRef(null); // Ref для Epiphany
-  const alahamoraRef = useRef(null); // Ref для Alahamora
+  const epiphanyRef = useRef(null);
+  const alahamoraRef = useRef(null);
 
   function finishGame(status = STATUS_LOST) {
     setGameEndDate(new Date());
@@ -366,6 +370,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5, lives = 3 }) {
             gameDurationMinutes={timer.minutes}
             onClick={resetGame}
             achievements={getAchievements()}
+            easyMode={easyMode}
           />
         </div>
       ) : null}

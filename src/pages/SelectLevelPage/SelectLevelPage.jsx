@@ -19,7 +19,7 @@ export function SelectLevelPage() {
   const handlePlayClick = () => {
     if (selectedLevel) {
       const lives = easyMode ? 3 : 1;
-      navigate(`/game/${selectedLevel}?lives=${lives}`);
+      navigate(`/game/${selectedLevel}?lives=${lives}&easyMode=${easyMode}`);
     } else {
       alert("Пожалуйста, выберите уровень сложности");
     }
